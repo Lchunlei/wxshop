@@ -39,9 +39,9 @@ Page({
 		}
 		//首页顶部Logo
 		wx.request({
-			url: app.globalData.urls + '/banner/list',
+      url: app.globalData.urls + '/banner/show',
 			data: {
-				type: 'toplogo'
+        banType: 'toplogo'
 			},
 			success: function(res) {
 				if (res.data.code == 0) {
@@ -54,62 +54,62 @@ Page({
 		})
 		//首页幻灯片
 		wx.request({
-			url: app.globalData.urls + '/banner/list',
+      url: app.globalData.urls + '/banner/show',
 			data: {
-				type: 'home'
+        banType: 'home'
 			},
 			success: function(res) {
-				if (res.data.code == 0) {
+        if (res.data.respCode == 'R000') {
 					that.setData({
-						banners: res.data.data
+            banners: res.data.respData
 					});
 				}
 			}
 		})
 		//4个功能展示位
 		wx.request({
-		  url: app.globalData.urls + '/banner/list',
+      url: app.globalData.urls + '/banner/show',
 		  data: {
-		    key: 'mallName',
-		    type: 'sale'
+        banType: 'sale'
 		  },
 		  success: function (res) {
-		    if (res.data.code == 0) {
+        if (res.data.respCode == 'R000') {
 		      that.setData({
-		        sales: res.data.data
+            sales: res.data.respData
 		      });
 		    }
 		  }
 		})
 		//4个热销广告位
 		wx.request({
-		  url: app.globalData.urls + '/banner/list',
+      url: app.globalData.urls + '/banner/show',
 		  data: {
-		    type: 'hot'
+        banType: 'hot'
 		  },
 		  success: function (res) {
-		    if (res.data.code == 0) {
+        if (res.data.respCode == 'R000') {
 		      that.setData({
-		        hot: res.data.data
+            hot: res.data.respData
 		      });
 		    }
 		  }
 		})
 		//获取推荐商品信息
 		wx.request({
-		  url: app.globalData.urls + '/config/get-value',
+      url: app.globalData.urls + '/config/show',
 		  data: {
 		    key: 'topgoods'
 		  },
 		  success: function (res) {
-		    if (res.data.code == 0) {
+        if (res.data.respCode == 'R000') {
 		      that.setData({
-		        topgoods: res.data.data
+            topgoods: res.data.respData
 		      });
 		      wx.request({
-		        url: app.globalData.urls + '/shop/goods/list',
+		        url: app.globalData.urls + '/goods/list',
 		        data: {
-		          recommendStatus: 1,
+              recommendStatus: 1,
+              pageNum: 1,
 		          pageSize: 10
 		        },
 		        success: function (res) {
@@ -118,14 +118,14 @@ Page({
 		            loadingMoreHidden: true
 		          });
 		          var goods = [];
-		          if (res.data.code != 0 || res.data.data.length == 0) {
+              if (res.data.respCode != 'R000' || res.data.respData.length == 0) {
 		            that.setData({
 		              loadingMoreHidden: false,
 		            });
 		            return;
 		          }
-		          for (var i = 0; i < res.data.data.length; i++) {
-		            goods.push(res.data.data[i]);
+              for (var i = 0; i < res.data.respData.length; i++) {
+                goods.push(res.data.respData[i]);
 		          }
 		          that.setData({
 		            goods: goods,

@@ -60,7 +60,7 @@ Page({
     if (app.globalData.iphone == true) { that.setData({ iphone: 'iphone' }) }
     that.getCoupons();
     wx.request({
-      url: app.globalData.urls + '/banner/list',
+      url: app.globalData.urls + '/banner/show',
       data: {
         key: 'mallName',
         type: 'duihuan'

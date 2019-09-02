@@ -36,8 +36,8 @@
         </view>
       </block>
       <block wx:if="{{goodsDetail.basicInfo.pingtuan == false}}">
-        <view class="goods-price">Ұ {{selectSizePrice}}</view>
-        <view class="goods-originalPrice">Ұ {{goodsDetail.basicInfo.originalPrice}}</view>
+        <view class="goods-price">Ұ {{selectSizePrice/100}}</view>
+        <view class="goods-originalPrice">Ұ {{goodsDetail.basicInfo.originalPrice/100}}</view>
         <view class="piangjia">
           已售 {{goodsDetail.basicInfo.numberOrders}}
         </view>

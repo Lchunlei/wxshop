@@ -86,33 +86,33 @@ Page({
       }
     })
     wx.request({
-      url: app.globalData.urls + '/banner/list',
+      url: app.globalData.urls + '/banner/show',
       data: {
-        key: 'mallName',
-        type: 'goods'
+        banType: 'goods'
       },
       success: function (res) {
-        if (res.data.code == 0) {
+        if (res.data.respCode == 'R000') {
           that.setData({
-            banners: res.data.data
+            banners: res.data.respData
           });
         }
       }
     }),
     wx.request({
-      url: app.globalData.urls + '/shop/goods/category/all',
+      url: app.globalData.urls + '/cate/all',
       success: function (res) {
-        var categories = [{ id: 0, name: "所有分类" }];
-        if (res.data.code == 0) {
+        var categories = [{ categoryId: 0, cateName: "所有分类" }];
+        if (res.data.respCode == 'R000') {
           wx.hideLoading();
-          for (var i = 0; i < res.data.data.length; i++) {
-            if (res.data.data[i].level == 1) {
-              categories.push(res.data.data[i]);
+          for (var i = 0; i < res.data.respData.length; i++) {
+            if (res.data.respData[i].cateLevel == 1) {
+              categories.push(res.data.respData[i]);
             }
           }
-        }//
+        }
         that.setData({
           categories: categories,
+          //默认被选中的ID
           activeCategoryId: 0
         });
         that.getGoodsList(0);
@@ -125,23 +125,22 @@ Page({
     }
     var that = this;
     wx.request({
-      url: app.globalData.urls + '/shop/goods/category/all',
+      url: app.globalData.urls + '/cate/all',
       success: function (res) {
         var categorieslist = [];
-        if (res.data.code == 0) {
-          for (var i = 0; i < res.data.data.length; i++) {
+        if (res.data.respCode == 'R000') {
+          for (var i = 0; i < res.data.respData.length; i++) {
             if (categoryId != '') {
-              if (res.data.data[i].pid == categoryId) {
-                categorieslist.push(res.data.data[i]);
+              if (res.data.respData[i].pid == categoryId) {
+                categorieslist.push(res.data.respData[i]);
               }
             } else {
-              //categorieslist.push(res.data.data[i]);
-              if (res.data.data[i].pid != 0) {
-                categorieslist.push(res.data.data[i]);
+              if (res.data.respData[i].pid != 0) {
+                categorieslist.push(res.data.respData[i]);
               }
             }
           }
-        }//
+        }
         that.setData({
           categorieslist: categorieslist,
         });
@@ -181,24 +180,24 @@ Page({
         }
       }
     })
-    wx.request({
-      url: app.globalData.urls + '/order/statistics',
-      data: { token: app.globalData.token },
-      success: function (res) {
-        if (res.data.code == 0) {
-          if (res.data.data.count_id_no_pay > 0) {
-            wx.setTabBarBadge({
-              index: 3,
-              text: '' + res.data.data.count_id_no_pay + ''
-            })
-          } else {
-            wx.removeTabBarBadge({
-              index: 3,
-            })
-          }
-        }
-      }
-    })
+    // wx.request({
+    //   url: app.globalData.urls + '/order/statistics',
+    //   data: { token: app.globalData.token },
+    //   success: function (res) {
+    //     if (res.data.code == 0) {
+    //       if (res.data.data.count_id_no_pay > 0) {
+    //         wx.setTabBarBadge({
+    //           index: 3,
+    //           text: '' + res.data.data.count_id_no_pay + ''
+    //         })
+    //       } else {
+    //         wx.removeTabBarBadge({
+    //           index: 3,
+    //         })
+    //       }
+    //     }
+    //   }
+    // })
   },
 
 })

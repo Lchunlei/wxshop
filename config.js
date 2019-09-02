@@ -1,9 +1,9 @@
 var config = {
 	 //链接源，一般不需要修改
-	'url': 'https://api.it120.cc/',
+  'url': 'https://test.51yuxian.com/',
 	
 	//这里填写你自己的工厂个性域名，工厂后台首页可以看到
-	'subDomain': 'fireshop',
+	'subDomain': 'shoplcl',
 	
 	//版本标识，这里不需要修改
 	'version': '1.0.0',

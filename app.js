@@ -42,16 +42,16 @@ App({
 	  wx.login({
 	    success: function (res) {
 	      wx.request({
-	        url: that.globalData.urls + "/user/wxapp/login",
+          url: that.globalData.urls + "/user/wxLogin",
 	        data: {
 	          code: res.code
 	        },
 	        success: function (res) {
-	          if (res.data.code == 1e4) {
+	          if (res.data.respCode == 1e4) {
 	            that.globalData.usinfo = 0;
 	            return;
 	          }
-	          if (res.data.code != 0) {
+            if (res.data.respCode != 'R000') {
 	            wx.hideLoading();
 	            wx.showModal({
 	              title: "提示",
@@ -60,8 +60,8 @@ App({
 	            });
 	            return;
 	          }
-	          that.globalData.token = res.data.data.token;
-	          that.globalData.uid = res.data.data.uid;
+            that.globalData.token = res.data.respData;
+	          that.globalData.uid = '1';
 	        }
 	      });
 	    }

@@ -21,7 +21,7 @@ function countdown(that) {
 }
 Page({
   data: {
-    second: 6,
+    second: 3,
     home: 0
   },
 
@@ -47,15 +47,15 @@ Page({
     var that = this;
     countdown(that);
     wx.request({
-      url: app.globalData.urls + '/banner/list',
+      url: app.globalData.urls + '/banner/show',
       data: {
         key: 'mallName',
-        type: 'start'
+        banType: 'start'
       },
       success: function (res) {
-        if (res.data.code == 0) {
+        if (res.data.respCode == "R000") {
           that.setData({
-            sales: res.data.data
+            sales: res.data.respData
           });
         }
       }

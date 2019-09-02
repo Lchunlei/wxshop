@@ -2,16 +2,16 @@
 <view class="container">
   <view class="type-container-boxx">
     <view class="type-container">
-      <view wx:for-items="{{categories}}" wx:key="id" class="type-box" bindtap="tabClick" id="{{item.id}}">
-        <view class="type-navbar-item {{activeCategoryId == item.id ? 'type-item-on' : ''}}">
-          {{item.name}}
+      <view wx:for-items="{{categories}}" wx:key="categoryId" class="type-box" bindtap="tabClick" id="{{item.categoryId}}">
+        <view class="type-navbar-item {{activeCategoryId == item.categoryId ? 'type-item-on' : ''}}">
+          {{item.cateName}}
         </view>
       </view>
     </view>
     <view class="type-list">
       <view class="swiper-container">
         <swiper class="swiper_box" autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}" bindchange="swiperchange">
-          <block wx:for="{{banners}}" wx:key="id">
+          <block wx:for="{{banners}}" wx:key="categoryId">
             <swiper-item>
               <image bindtap="toDetailsTap" data-id="{{item.businessId}}" src="{{item.picUrl}}_m" class="slide-image" mode="widthFix" />
             </swiper-item>
@@ -24,10 +24,10 @@
         </view>
       </view>
       <view if="{{item.level == 2}}" class="type-menu">
-        <view class="type-level-box" wx:for-items="{{categorieslist}}" wx:key="id">
-          <view id="{{item.id}}" class="type-level-item " bindtap="levelClick" data-id="{{item.id}}">
-            <image class="type-img" src="{{item.icon}}"></image>
-            <text>{{item.name}}</text>
+        <view class="type-level-box" wx:for-items="{{categorieslist}}" wx:key="categoryId">
+          <view id="{{item.categoryId}}" class="type-level-item " bindtap="levelClick" data-id="{{item.categoryId}}">
+            <image class="type-img" src="{{item.cateIcon}}"></image>
+            <text>{{item.cateName}}</text>
           </view>
         </view>
       </view>

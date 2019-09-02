@@ -47,7 +47,8 @@ Page({
   onLoad: function (e) {
     var that = this;
 
-    if (!e.id) { //扫码进入
+    if (!e.ductId) {
+      console.log("扫码进入" + e.ductId);
       var scene = decodeURIComponent(e.scene);
       if (scene.length > 0 && scene != undefined) {
         var scarr = scene.split(',');
@@ -76,16 +77,18 @@ Page({
         }
       }
     }
-    if (!e.scene) { //链接进入
+    if (!e.scene) {
+      console.log("链接进入" + e.scene);
       if (e.inviter_id) {
+        console.log("页面跳转" + e.ductId);
         wx.setStorage({
-          key: 'inviter_id_' + e.id,
+          key: 'inviter_id_' + e.ductId,
           data: e.inviter_id
         })
       }
       if (e.share) { that.setData({ share: e.share }); }
       that.setData({
-        id: e.id
+        id: e.ductId
       })
     }
 
@@ -93,14 +96,14 @@ Page({
     
     if (app.globalData.iphone == true) { that.setData({ iphone: 'iphone' }) }
     wx.request({
-      url: app.globalData.urls + '/banner/list',
+      url: app.globalData.urls + '/banner/show',
       data: {
-        type: 'toplogo'
+        banType: 'toplogo'
       },
       success: function (res) {
-        if (res.data.code == 0) {
+        if (res.data.respCode == 'R000') {
           that.setData({
-            toplogo: res.data.data[0].picUrl,
+            toplogo: res.data.respData[0].picUrl,
             topname: wx.getStorageSync('mallName')
           });
         }
@@ -118,36 +121,36 @@ Page({
       }
     })
     wx.request({
-      url: app.globalData.urls + '/shop/goods/detail',
+      url: app.globalData.urls + '/goods/info',
       data: {
-        id: that.data.id
+        ductId: that.data.id
       },
       success: function (res) {
 				console.log(res)
         var selectSizeTemp = "";
-        if (res.data.data.properties) {
-          for (var i = 0; i < res.data.data.properties.length; i++) {
-            selectSizeTemp = selectSizeTemp + " " + res.data.data.properties[i].name;
+        if (res.data.respData.properties) {
+          for (var i = 0; i < res.data.respData.properties.length; i++) {
+            selectSizeTemp = selectSizeTemp + " " + res.data.respData.properties[i].spuName;
           }
           that.setData({
             hasMoreSelect: true,
             selectSize: that.data.selectSize + selectSizeTemp,
-            selectSizePrice: res.data.data.basicInfo.minPrice,
-            selectptPrice: res.data.data.basicInfo.pingtuanPrice
+            selectSizePrice: res.data.respData.basicInfo.minPrice,
+            selectptPrice: res.data.respData.basicInfo.pingtuanPrice
           });
         }
-        that.data.goodsDetail = res.data.data;
-        if (res.data.data.basicInfo.videoId) {
-          that.getVideoSrc(res.data.data.basicInfo.videoId);
+        that.data.goodsDetail = res.data.respData;
+        if (res.data.respData.basicInfo.videoId) {
+          that.getVideoSrc(res.data.respData.basicInfo.videoId);
         }
         that.setData({
-          goodsDetail: res.data.data,
-          selectSizePrice: res.data.data.basicInfo.minPrice,
-          buyNumMax: res.data.data.basicInfo.stores,
-          buyNumber: (res.data.data.basicInfo.stores > 0) ? 1 : 0,
-          selectptPrice: res.data.data.basicInfo.pingtuanPrice
+          goodsDetail: res.data.respData,
+          selectSizePrice: res.data.respData.basicInfo.minPrice,
+          buyNumMax: res.data.respData.basicInfo.stores,
+          buyNumber: (res.data.respData.basicInfo.stores > 0) ? 1 : 0,
+          selectptPrice: res.data.respData.basicInfo.pingtuanPrice
         });
-        WxParse.wxParse('article', 'html', res.data.data.content, that, 5);
+        WxParse.wxParse('article', 'html', res.data.respData.content, that, 5);
         that.goPingtuan();
         that.goPingList();
       }
@@ -596,15 +599,15 @@ Page({
   reputation: function (goodsId) {
     var that = this;
     wx.request({
-      url: app.siteInfo.url + app.siteInfo.subDomain + '/shop/goods/reputation',
+      url: app.siteInfo.url + app.siteInfo.subDomain + '/goods/info',
       data: {
-        goodsId: goodsId
+        ductId: goodsId
       },
       success: function (res) {
-        if (res.data.code == 0) {
+        if (res.data.respCode == 'R000') {
           //console.log(res.data.data);
           that.setData({
-            reputation: res.data.data
+            reputation: res.data.respData
           });
         }
       }
@@ -612,27 +615,27 @@ Page({
   },
   getfav: function () {
     //console.log(e)
-    var that = this;
-    var id = that.data.id
-    wx.request({
-      url: app.globalData.urls + '/shop/goods/fav/list',
-      data: {
-        //nameLike: this.data.goodsDetail.basicInfo.name,
-        token: app.globalData.token
-      },
-      success: function (res) {
-        if (res.data.code == 0 && res.data.data.length) {
-          for (var i = 0; i < res.data.data.length; i++) {
-            if (res.data.data[i].goodsId == parseInt(id)) {
-              that.setData({
-                favicon: 1
-              });
-              break;
-            }
-          }
-        }
-      }
-    })
+    // var that = this;
+    // var id = that.data.id
+    // wx.request({
+    //   url: app.globalData.urls + '/shop/goods/fav/list',
+    //   data: {
+    //     //nameLike: this.data.goodsDetail.basicInfo.name,
+    //     token: app.globalData.token
+    //   },
+    //   success: function (res) {
+    //     if (res.data.code == 0 && res.data.data.length) {
+    //       for (var i = 0; i < res.data.data.length; i++) {
+    //         if (res.data.data[i].goodsId == parseInt(id)) {
+    //           that.setData({
+    //             favicon: 1
+    //           });
+    //           break;
+    //         }
+    //       }
+    //     }
+    //   }
+    // })
   },
   fav: function () {
     var that = this;
